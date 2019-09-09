@@ -1,30 +1,30 @@
 <template>
   <v-app>
-    <!--  menu  -->
-    <v-app-bar app>
-      <v-btn @click.stop="drawer = !drawer" icon>
-        <v-icon>list</v-icon>
-      </v-btn>
+    <v-app-bar app dense>
+      <v-tabs
+        v-model="tab"
+        align-with-title
+        slider-size="6"
+        background-color="transparent"
+      >
+        <v-tabs-slider color="blue"></v-tabs-slider>
 
-      <v-navigation-drawer v-model="drawer" absolute temporary height="400">
-        <v-list>
-          <v-list-item v-for="item in items" :key="item.title" :to="item.link">
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
+        <v-tab v-for="item in items" :key="item.title" :to="item.link">
+          <v-icon>{{ item.icon }}</v-icon>
+          <div class="ml-1">
+            {{ item.title }}
+          </div>
+        </v-tab>
+      </v-tabs>
 
+      <v-tabs-items v-model="tab">
+        <v-tab-item v-for="item in items" :key="item"> </v-tab-item>
+      </v-tabs-items>
       <v-toolbar-title class="headline text-uppercase">
         <span>Vuetify</span>
         <span class="font-weight-light">MATERIAL DESIGN</span>
       </v-toolbar-title>
     </v-app-bar>
-
     <v-content>
       <router-view />
     </v-content>
@@ -38,15 +38,26 @@ export default Vue.extend({
   name: 'App',
   data() {
     return {
-      drawer: null,
       items: [
-        { title: 'Home', icon: 'dashboard', link: '/' },
+        { title: 'Home', icon: 'home', link: '/' },
         { title: 'About', icon: 'event_note', link: '/about' },
         { title: 'contact', icon: 'question_answer', link: '/contact' },
-        { title: 'table', icon: 'question_answer', link: '/axios' },
-        { title: 'chart', icon: 'show_chart', link: '/line' }
+        {
+          title: 'Daily',
+          icon: 'table_chart',
+          link: '/table'
+        },
+        {
+          title: 'graph',
+          icon: 'multiline_chart',
+          link: '/line'
+        },
+        { title: 'test01', icon: 'event_note', link: '/test01' }
       ]
     }
+  },
+  created: function() {
+    this.$store.dispatch('getJSON')
   }
 })
 </script>

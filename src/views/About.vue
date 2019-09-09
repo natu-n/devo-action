@@ -1,55 +1,88 @@
 <template>
-  <v-layout wrap>
-    <v-flex xs12 lg6>
-      <div v-ripple="{ center: true }">
-        <v-dialog
-          ref="dialog"
-          v-model="modal"
-          :return-value.sync="date"
-          persistent
-          width="290px"
-        >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              label="From To"
-              v-model="date"
-              :prefix="fromDate + ' - '"
-              prepend-icon="event"
-              x-larg="true"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="date" scrollable>
-            <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.dialog.save(date)"
-              >OK</v-btn
-            >
-          </v-date-picker>
-        </v-dialog>
-      </div>
-    </v-flex>
-  </v-layout>
+  <v-app>
+    <v-container>
+      <v-card class="mx-auto mt-4" max-width="600" elevation="0">
+        <v-row justify="space-around" v-if="$store.state.loading">
+          <div>
+            <div class="title">Until last month</div>
+            <v-date-picker
+              v-model="pastDate"
+              min="2017-10-20"
+              :max="lastPastDate"
+              :events="functionEvents"
+              event-color="green lighten-1"
+              color="blue lighten-3"
+              header-color="green lighten-1"
+            ></v-date-picker>
+          </div>
+          <div>
+            <div class="title">this month</div>
+            <v-date-picker
+              v-model="today"
+              :disabled="true"
+              :events="functionEvents"
+              color="blue lighten-5"
+              header-color="primary"
+            ></v-date-picker>
+          </div>
+        </v-row>
+      </v-card>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
+import Utilities from '@/components/Utilities'
 import dayjs from 'dayjs'
 
 export default {
+  mixins: [Utilities],
   data: () => ({
-    fromDate: dayjs(new Date())
-      .add(-13, 'day')
-      .format('YYYY-MM-DD'),
-
-    date: dayjs(new Date()).format('YYYY-MM-DD'),
-    modal: false
+    arrayEvents: null,
+    pastDate: null,
+    lastPastDate: null,
+    today: null
   }),
-  computed: {},
-  watch: {
-    date: function(value) {
-      this.fromDate = dayjs(value)
-        .add(-13, 'day')
-        .format('YYYY-MM-DD')
+
+  mounted() {
+    this.today = this.$store.state.toDate
+    this.pastDate = dayjs(this.today)
+      .subtract(1, 'month')
+      .format('YYYY-MM-DD')
+    this.lastPastDate = dayjs(this.pastDate)
+      .endOf('month')
+      .format('YYYY-MM-DD')
+  },
+
+  methods: {
+    functionEvents(date) {
+      let dotColor = []
+      const i = this.$store.state.info.findIndex(function(
+        element,
+        index,
+        array
+      ) {
+        return date == element.date
+      })
+      if (i > 0) {
+        dotColor.push(this.getSystolicColor(this.$store.state.info[i].systolic))
+        dotColor.push(
+          this.getDiastolicColor(this.$store.state.info[i].diastolic)
+        )
+        return dotColor
+      } else {
+        return false
+      }
     }
   }
 }
 </script>
+
+<style>
+.v-application .grey.darken-1 {
+  background-color: transparent !important;
+  border-color: #212121 !important;
+  border-width: thin;
+  border-style: solid;
+}
+</style>
