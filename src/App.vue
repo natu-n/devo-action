@@ -1,13 +1,12 @@
 <template>
   <v-app>
-    <!--  menu  -->
-    <v-app-bar app>
+    <v-app-bar app dense>
       <v-btn @click.stop="drawer = !drawer" icon>
         <v-icon>list</v-icon>
       </v-btn>
 
-      <v-navigation-drawer v-model="drawer" absolute temporary height="400">
-        <v-list>
+      <v-navigation-drawer v-model="drawer" absolute temporary height="300">
+        <v-list dense nav>
           <v-list-item v-for="item in items" :key="item.title" :to="item.link">
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
@@ -40,13 +39,24 @@ export default Vue.extend({
     return {
       drawer: null,
       items: [
-        { title: 'Home', icon: 'dashboard', link: '/' },
+        { title: 'Home', icon: 'home', link: '/' },
         { title: 'About', icon: 'event_note', link: '/about' },
         { title: 'contact', icon: 'question_answer', link: '/contact' },
-        { title: 'table', icon: 'question_answer', link: '/axios' },
-        { title: 'chart', icon: 'show_chart', link: '/line' }
+        {
+          title: 'Daily blood pressure',
+          icon: 'table_chart',
+          link: '/table'
+        },
+        {
+          title: 'Blood pressure graph',
+          icon: 'multiline_chart',
+          link: '/line'
+        }
       ]
     }
+  },
+  created: function() {
+    this.$store.dispatch('getJSON')
   }
 })
 </script>

@@ -1,9 +1,14 @@
-<template v-if="loading">
-  <v-card class="mx-auto mt-4" color="grey lighten-4" max-width="600">
-    <template>
-      <v-row>
-        <v-col></v-col>
-        <v-col>
+<template>
+  <v-app>
+    <v-card class="mx-auto mt-4" max-width="800">
+      <template v-if="$store.state.loading">
+        <v-toolbar dense dark color="indigo darken-2">
+          <v-toolbar-title>Blood pressure graph</v-toolbar-title>
+        </v-toolbar>
+        <p v-if="this.toDate == null" v-show="true">
+          {{ (this.toDate = this.$store.state.toDate) }}
+        </p>
+        <div>
           <v-dialog
             ref="dialog"
             v-model="modal"
@@ -18,100 +23,122 @@
                 prepend-icon="event"
                 x-larg="true"
                 v-on="on"
+                class="mx-2"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="toDate" :max="today" scrollable>
+            <v-date-picker
+              v-model="toDate"
+              :max="$store.state.today"
+              scrollable
+            >
               <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.dialog.save(toDate)"
-                >OK</v-btn
-              >
+              <v-btn text color="primary" @click="setDate(toDate)">OK</v-btn>
             </v-date-picker>
           </v-dialog>
-        </v-col>
-      </v-row>
-
-      <line-chart :chart-data="fillData()" :width="480" :height="200" />
-    </template>
-  </v-card>
+        </div>
+        <line-chart :chart-data="fillData()" :width="590" :height="200" />
+        <v-card class="mx-2" flat>
+          <div class="subtitle">Select past data</div>
+          <v-slider
+            v-model="past"
+            min="0"
+            max="3"
+            :tick-labels="getLabel(SLIDER)"
+            ticks="always"
+            tick-size="4"
+          ></v-slider>
+        </v-card>
+      </template>
+    </v-card>
+  </v-app>
 </template>
 
 <script>
-import axios, * as axios_1 from 'axios'
 import dayjs from 'dayjs'
 import LineChart from '@/components/LineChart'
-
-const API_URL =
-  'https://script.google.com/macros/s/AKfycbz-Dn3YLNsx4wWJ3zTcgukvEY7LmrZaxSIGgwy_L6M_5b5hLsw/exec'
 
 export default {
   components: { LineChart },
   data: () => ({
-    today: dayjs(new Date()).format('YYYY-MM-DD'),
-    lbl: [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
     fromDate: dayjs(new Date())
-      .add(-13, 'day')
+      .subtract(13, 'day')
       .format('YYYY-MM-DD'),
-    toDate: dayjs(new Date()).format('YYYY-MM-DD'),
-    xLabel: [],
-    info: null,
-    loading: false,
-    modal: false
+    toDate: null,
+    modal: false,
+    past: 0,
+    fromPastDate: dayjs(new Date())
+      .subtract(1, 'month')
+      .format('YYYY-MM-DD'),
+    toPastDate: null
   }),
 
-  computed: {},
-  async created() {
-    var _this = this
-    let res = await axios
-      .get(API_URL)
-      .then(response => (this.info = response))
-      .finally(() => (this.loading = false))
+  computed: {
+    LBL: () => [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+    SLIDER: () => [
+      { label: 'A month ago', subVal: 1, period: 'month' },
+      { label: '3 months ago', subVal: 3, period: 'month' },
+      { label: '6 months ago', subVal: 6, period: 'month' },
+      { label: 'A year ago', subVal: 1, period: 'year' }
+    ],
+    SYSTOLIC: () => 'systolic',
+    DIASTOLIC: () => 'diastolic'
   },
 
   watch: {
     toDate: function(value) {
       this.fromDate = dayjs(value)
-        .add(-13, 'day')
+        .subtract(13, 'day')
+        .format('YYYY-MM-DD')
+      this.setPastDate(this.past)
+    },
+
+    // ToDo:method only
+    past: function(value) {
+      this.toPastDate = dayjs(this.toDate)
+        .subtract(this.SLIDER[value].subVal, this.SLIDER[value].period)
+        .format('YYYY-MM-DD')
+      this.fromPastDate = dayjs(this.toPastDate)
+        .subtract(13, 'day')
         .format('YYYY-MM-DD')
     }
   },
 
   methods: {
+    setPastDate: function(past) {
+      this.toPastDate = dayjs(this.toDate)
+        .subtract(this.SLIDER[past].subVal, this.SLIDER[past].period)
+        .format('YYYY-MM-DD')
+      this.fromPastDate = dayjs(this.toPastDate)
+        .subtract(13, 'day')
+        .format('YYYY-MM-DD')
+    },
+
+    setDate(value) {
+      this.$refs.dialog.save(value)
+      this.$store.commit('setToDate', value)
+    },
+
     setLb: function(value) {
-      return this.lbl.map(function(element, index, array) {
+      return this.LBL.map(function(element, index, array) {
         return dayjs(value)
-          .add(-element, 'day')
+          .subtract(element, 'day')
           .format('M/D')
       })
     },
 
-    customFilter(value) {
-      var _this = this
+    getLabel(value) {
       return value
         .map(function(element, index, array) {
-          if (_this.fromDate <= element.date && element.date <= _this.toDate) {
-            return element
-          }
+          return element.label
         })
         .filter(x => x)
     },
 
-    setSystolic(value) {
-      var _this = this
-      return value
+    setItem(key, from, to) {
+      return this.$store.state.info
         .map(function(element, index, array) {
-          if (_this.fromDate <= element.date && element.date <= _this.toDate) {
-            return element.systolic
-          }
-        })
-        .filter(x => x)
-    },
-
-    setDiastolic(value) {
-      var _this = this
-      return value
-        .map(function(element, index, array) {
-          if (_this.fromDate <= element.date && element.date <= _this.toDate) {
-            return element.diastolic
+          if (from <= element.date && element.date <= to) {
+            return element[key]
           }
         })
         .filter(x => x)
@@ -134,7 +161,7 @@ export default {
             label: 'systolic',
             borderColor: 'red',
             lineTension: 0,
-            data: this.setSystolic(this.info.data),
+            data: this.setItem(this.SYSTOLIC, this.fromDate, this.toDate),
             fill: false
           },
           {
@@ -142,7 +169,31 @@ export default {
             label: 'diastolic',
             borderColor: 'indigo',
             lineTension: 0,
-            data: this.setDiastolic(this.info.data),
+            data: this.setItem(this.DIASTOLIC, this.fromDate, this.toDate),
+            fill: false
+          },
+          {
+            yAxisID: 'third-y-axis',
+            label: 'past-systolic',
+            borderColor: '#FFCDD2',
+            lineTension: 0,
+            data: this.setItem(
+              this.SYSTOLIC,
+              this.fromPastDate,
+              this.toPastDate
+            ),
+            fill: false
+          },
+          {
+            yAxisID: 'fourth-y-axis',
+            label: 'past-diastolic',
+            borderColor: '#C5CAE9',
+            lineTension: 0,
+            data: this.setItem(
+              this.DIASTOLIC,
+              this.fromPastDate,
+              this.toPastDate
+            ),
             fill: false
           }
         ]
@@ -151,10 +202,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.chart {
-  width: 500px;
-  height: 500px;
-}
-</style>

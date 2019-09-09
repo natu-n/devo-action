@@ -5,7 +5,7 @@ import Home from './views/Home.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  //  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
@@ -16,9 +16,6 @@ export default new Router({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () =>
         import(/* webpackChunkName: "about" */ '@/views/About.vue')
     },
@@ -28,13 +25,13 @@ export default new Router({
       component: () => import('@/views/Contact.vue')
     },
     {
-      path: '/axios',
-      name: 'axios',
-      component: () => import('@/views/axios.vue')
+      path: '/table',
+      name: 'Daily blood pressure',
+      component: () => import('@/views/dTable.vue')
     },
     {
       path: '/line',
-      name: 'line',
+      name: 'Blood pressure graph',
       component: () => import('@/views/line.vue')
     }
   ]
