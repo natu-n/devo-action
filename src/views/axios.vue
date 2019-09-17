@@ -88,9 +88,9 @@ export default {
     modal: false
   }),
 
-  created: function() {
-    this.$store.dispatch('getJSON')
-  },
+  // created: function() {
+  //   this.$store.dispatch('getJSON')
+  // },
 
   methods: {
     setDate(value) {

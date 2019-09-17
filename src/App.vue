@@ -47,6 +47,9 @@ export default Vue.extend({
         { title: 'chart', icon: 'show_chart', link: '/line' }
       ]
     }
+  },
+  created: function() {
+    this.$store.dispatch('getJSON')
   }
 })
 </script>

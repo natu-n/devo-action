@@ -1,6 +1,13 @@
 <template>
   <v-card class="mx-auto" max-width="800" outlined>
-    <v-row class="fill-height">
+    <v-row class="fill-height" v-if="$store.state.loading">
+      <p v-if="this.focus == null" v-show="true">
+        {{
+          ((this.focus = this.$store.state.toDate),
+          (this.end = this.$store.state.toDate))
+        }}
+      </p>
+
       <v-col>
         <v-row class="pa-0 ma-0">
           <v-col class="pa-0 ma-0">
@@ -41,7 +48,7 @@
 <script>
 export default {
   data: () => ({
-    focus: new Date().toISOString().substr(0, 10),
+    focus: null,
     start: null,
     end: null,
     selectedEvent: {},

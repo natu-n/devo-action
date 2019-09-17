@@ -64,9 +64,9 @@ export default {
 
   computed: {},
 
-  created: function() {
-    this.$store.dispatch('getJSON')
-  },
+  // created: function() {
+  //   this.$store.dispatch('getJSON')
+  // },
 
   watch: {
     toDate: function(value) {
