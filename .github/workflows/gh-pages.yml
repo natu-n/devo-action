@@ -17,13 +17,10 @@ jobs:
         node-version: '10.16'
 
     - name: install
-      run: npm install
-
-    - name: test
-      run: npm test
+      run: yarn add
 
     - name: generate
-      run: npm run generate
+      run: yarn run build
 
     - name: deploy
       uses: peaceiris/actions-gh-pages@v2.2.0
