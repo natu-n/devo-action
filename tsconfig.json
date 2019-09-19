@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": "./",
-    "assetsSubDirectory:" "",
+    "assetsSubDirectory": "",
     "assetsPublicPath": "",
       "types": [
       "webpack-env",
