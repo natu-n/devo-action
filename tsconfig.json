@@ -10,8 +10,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "publicPath": "./",
+    "assetsDir": "./",
     "types": [
       "webpack-env",
       "jest",
