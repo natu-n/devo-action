@@ -11,9 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": "./",
-    "assetsSubDirectory": "",
-    "assetsPublicPath": "",
-      "types": [
+    "types": [
       "webpack-env",
       "jest",
       "vuetify",
