@@ -48,9 +48,9 @@
                   height="23"
                   tile
                 >
-                  <shhet-footer v-if="i == 0">
-                    {{ Systolic[date] }}</shhet-footer
-                  >
+                  <p v-if="i == 0">
+                    {{ Systolic[date] }}
+                  </p>
                 </v-sheet>
               </v-row>
               <v-row class="mx-0 px-0">
@@ -66,9 +66,9 @@
                   height="23"
                   tile
                 >
-                  <shhet-footer v-if="i == 0">
-                    {{ Diastolic[date] }}</shhet-footer
-                  >
+                  <p v-if="i == 0">
+                    {{ Diastolic[date] }}
+                  </p>
                 </v-sheet>
               </v-row>
             </template>
