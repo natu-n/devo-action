@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
   publicPath: "./",
   assetsDir: "",
-  outputDir: "dist",
+  outputDir: "../dist",
   configureWebpack: {
     resolve: {
       alias: {
