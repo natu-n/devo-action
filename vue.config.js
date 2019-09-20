@@ -2,7 +2,6 @@ const path = require('path')
 
 module.exports = {
   publicPath: '/',
-  assetsSubDirectory: '',
   assetsPublicPath: '',
   configureWebpack: {
     resolve: {
