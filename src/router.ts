@@ -9,28 +9,28 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
+      path: '/devo-action/',
       name: 'home',
       component: Home
     },
     {
-      path: '/about',
+      path: '/devo-action/about',
       name: 'about',
       component: () =>
         import(/* webpackChunkName: "about" */ '@/views/About.vue')
     },
     {
-      path: '/contact',
+      path: '/devo-action/contact',
       name: 'contact',
       component: () => import('@/views/Contact.vue')
     },
     {
-      path: '/axios',
+      path: '/devo-action/axios',
       name: 'axios',
       component: () => import('@/views/axios.vue')
     },
     {
-      path: '/line',
+      path: '/devo-action/line',
       name: 'line',
       component: () => import('@/views/line.vue')
     }
