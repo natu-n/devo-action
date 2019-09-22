@@ -1,13 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="800" outlined>
     <v-row class="fill-height" v-if="$store.state.loading">
-      <p v-if="this.focus == null" v-show="true">
-        {{
-          ((this.focus = this.$store.state.toDate),
-          (this.end = this.$store.state.toDate))
-        }}
-      </p>
-
       <v-col>
         <v-row class="pa-0 ma-0">
           <v-col class="pa-0 ma-0">
@@ -29,8 +22,10 @@
         </v-row>
         <v-sheet height="500" width="800">
           <v-calendar
+            ref="calendar"
+            v-model="focus"
             :now="today"
-            :value="today"
+            type="month"
             color="primary"
             class="fill-hight"
           >
@@ -82,10 +77,11 @@
 <script>
 export default {
   data: () => ({
+    today: null,
     focus: null,
+    type: 'month',
     start: null,
     end: null,
-    today: '2019-01-10',
     selectedEvent: {},
     selectedElement: null,
     Systolic: {
@@ -127,7 +123,12 @@ export default {
       }
 
       const startMonth = this.monthFormatter(start)
+      const endMonth = this.monthFormatter(end)
+      const suffixMonth = startMonth === endMonth ? '' : endMonth
+
       const startYear = start.year
+      const endYear = end.year
+      const suffixYear = startYear === endYear ? '' : endYear
 
       return `${startMonth} ${startYear}`
     },
@@ -137,6 +138,11 @@ export default {
         month: 'long'
       })
     }
+  },
+  mounted() {
+    this.today = this.$store.state.toDate
+    this.focus = this.$store.state.toDate
+    this.$refs.calendar.checkChange()
   },
   methods: {
     getEventColor(event) {
