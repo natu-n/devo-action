@@ -1,34 +1,30 @@
 <template>
-  <v-layout wrap>
-    <v-flex xs12 lg6>
-      <div v-ripple="{ center: true }">
-        <v-dialog
-          ref="dialog"
-          v-model="modal"
-          :return-value.sync="date"
-          persistent
-          width="290px"
-        >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              label="From To"
-              v-model="date"
-              :prefix="fromDate + ' - '"
-              prepend-icon="event"
-              x-larg="true"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="date" scrollable>
-            <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.dialog.save(date)"
-              >OK</v-btn
-            >
-          </v-date-picker>
-        </v-dialog>
+  <v-card class="mx-auto" max-width="600" elevation="0">
+    <v-row justify="space-around" v-if="$store.state.loading">
+      <div>
+        <div class="subheading">Until last month</div>
+        <v-date-picker
+          v-model="pastDate"
+          :max="lastPastDate"
+          :events="arrayEvents"
+          event-color="green lighten-1"
+          color="blue lighten-4"
+          header-color="green lighten-1"
+        ></v-date-picker>
       </div>
-    </v-flex>
-  </v-layout>
+      <div>
+        <div class="subheading">this month</div>
+        <v-date-picker
+          v-model="today"
+          :disabled="true"
+          :event-color="date => (date[9] % 2 ? 'red' : 'yellow')"
+          :events="functionEvents"
+          color="blue lighten-5"
+          header-color="primary"
+        ></v-date-picker>
+      </div>
+    </v-row>
+  </v-card>
 </template>
 
 <script>
@@ -36,19 +32,36 @@ import dayjs from 'dayjs'
 
 export default {
   data: () => ({
-    fromDate: dayjs(new Date())
-      .add(-13, 'day')
-      .format('YYYY-MM-DD'),
-
-    date: dayjs(new Date()).format('YYYY-MM-DD'),
-    modal: false
+    arrayEvents: null,
+    pastDate: null,
+    lastPastDate: null,
+    today: null
   }),
-  computed: {},
-  watch: {
-    date: function(value) {
-      this.fromDate = dayjs(value)
-        .add(-13, 'day')
-        .format('YYYY-MM-DD')
+
+  mounted() {
+    this.today = this.$store.state.toDate
+    this.pastDate = dayjs(this.today)
+      .add(-1, 'month')
+      .format('YYYY-MM-DD')
+    this.lastPastDate = dayjs(this.pastDate)
+      .endOf('month')
+      .format('YYYY-MM-DD')
+
+    this.arrayEvents = [...Array(6)].map(() => {
+      const day = Math.floor(Math.random() * 30)
+      const d = new Date()
+      d.setDate(day)
+      return d.toISOString().substr(0, 10)
+    })
+  },
+
+  methods: {
+    functionEvents(date) {
+      console.log(date)
+      const [, , day] = date.split('-')
+      if ([12, 17, 28].includes(parseInt(day, 10))) return true
+      if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']
+      return false
     }
   }
 }
