@@ -34,7 +34,15 @@ export default {
     arrayEvents: null,
     pastDate: null,
     lastPastDate: null,
-    today: null
+    today: null,
+    colors: [
+      'green accent-2',
+      'green accent-3',
+      'green accent-4',
+      'orange',
+      'red',
+      'purple'
+    ]
   }),
 
   mounted() {
@@ -49,37 +57,55 @@ export default {
 
   methods: {
     functionEvents(date) {
-      const dotColor = []
-      const ix = this.$store.state.info.findIndex(function(
+      let dotColor = []
+      const i = this.$store.state.info.findIndex(function(
         element,
         index,
         array
       ) {
         return date == element.date
       })
-      if (ix > 0) {
-        const diastolic = this.$store.state.info[ix].diastolic
-        const systolic = this.$store.state.info[ix].systolic
-
-        if (diastolic > 84) {
-          dotColor.push('red')
-        } else if (diastolic > 79) {
-          dotColor.push('orange')
-        } else {
-          dotColor.push('green')
-        }
-
-        if (systolic > 134) {
-          dotColor.push('red')
-        } else if (systolic > 129) {
-          dotColor.push('orange')
-        } else {
-          dotColor.push('green')
-        }
+      if (i > 0) {
+        dotColor.push(this.getSystolicColor(this.$store.state.info[i].systolic))
+        dotColor.push(
+          this.getDiastolicColor(this.$store.state.info[i].diastolic)
+        )
         return dotColor
       } else {
         return false
       }
+    },
+    getSystolicColor(val) {
+      let j = 0
+      if (val < 115) {
+        j = 0
+      } else if (115 <= val && val < 125) {
+        j = 1
+      } else if (125 <= val && val < 135) {
+        j = 2
+      } else if (135 <= val && val < 145) {
+        j = 3
+      } else if (145 <= val && val < 160) {
+        j = 4
+      } else {
+        j = 5
+      }
+      return this.colors[j]
+    },
+    getDiastolicColor(val) {
+      let j = 0
+      if (val < 75) {
+        j = 0
+      } else if (75 <= val && val < 85) {
+        j = 2
+      } else if (85 <= val && val < 90) {
+        j = 3
+      } else if (90 <= val && val < 100) {
+        j = 4
+      } else {
+        j = 5
+      }
+      return this.colors[j]
     }
   }
 }
