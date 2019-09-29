@@ -5,6 +5,7 @@
         <div class="title">Until last month</div>
         <v-date-picker
           v-model="pastDate"
+          min="2017-10-20"
           :max="lastPastDate"
           :events="functionEvents"
           event-color="green lighten-1"
@@ -27,22 +28,16 @@
 </template>
 
 <script>
+import Utilities from '@/components/Utilities'
 import dayjs from 'dayjs'
 
 export default {
+  mixins: [Utilities],
   data: () => ({
     arrayEvents: null,
     pastDate: null,
     lastPastDate: null,
-    today: null,
-    colors: [
-      'green accent-2',
-      'green accent-3',
-      'green accent-4',
-      'orange',
-      'red',
-      'purple'
-    ]
+    today: null
   }),
 
   mounted() {
@@ -74,38 +69,6 @@ export default {
       } else {
         return false
       }
-    },
-    getSystolicColor(val) {
-      let j = 0
-      if (val < 115) {
-        j = 0
-      } else if (115 <= val && val < 125) {
-        j = 1
-      } else if (125 <= val && val < 135) {
-        j = 2
-      } else if (135 <= val && val < 145) {
-        j = 3
-      } else if (145 <= val && val < 160) {
-        j = 4
-      } else {
-        j = 5
-      }
-      return this.colors[j]
-    },
-    getDiastolicColor(val) {
-      let j = 0
-      if (val < 75) {
-        j = 0
-      } else if (75 <= val && val < 85) {
-        j = 2
-      } else if (85 <= val && val < 90) {
-        j = 3
-      } else if (90 <= val && val < 100) {
-        j = 4
-      } else {
-        j = 5
-      }
-      return this.colors[j]
     }
   }
 }

@@ -69,9 +69,11 @@
 </template>
 
 <script>
+import Utilities from '@/components/Utilities'
 import dayjs from 'dayjs'
 
 export default {
+  mixins: [Utilities],
   data: () => ({
     headers: [
       { text: 'date', align: 'center', value: 'date', sortable: false },
@@ -88,10 +90,6 @@ export default {
     modal: false
   }),
 
-  // created: function() {
-  //   this.$store.dispatch('getJSON')
-  // },
-
   methods: {
     setDate(value) {
       this.$refs.dialog.save(value)
@@ -99,23 +97,14 @@ export default {
     },
 
     customFilter(value, search, item) {
-      // return value != null
       return this.fromDate <= value && value <= this.toDate
     },
+
     cvtDate(date) {
       return dayjs(date).format('M/D/YYYY')
-    },
-    getSystolicColor(bp) {
-      if (bp > 134) return 'red'
-      else if (bp > 129) return 'orange'
-      else return 'green'
-    },
-    getDiastolicColor(bp) {
-      if (bp > 84) return 'red'
-      else if (bp > 79) return 'orange'
-      else return 'green'
     }
   },
+
   computed: {
     fromDate: function() {
       return dayjs(this.toDate)
