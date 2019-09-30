@@ -73,3 +73,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-application .grey.darken-1 {
+  background-color: transparent !important;
+  border-color: #212121 !important;
+  border-width: thin;
+  border-style: solid;
+}
+</style>

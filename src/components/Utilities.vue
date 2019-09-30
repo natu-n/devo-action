@@ -3,9 +3,9 @@ export default {
   data() {
     return {
       colors: [
-        'grey lighten-2',
-        'green accent-2',
+        'grey darken-1',
         'green accent-4',
+        'green',
         'orange',
         'red',
         'purple'

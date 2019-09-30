@@ -54,14 +54,22 @@
           <td>{{ cvtDate(item.date) }}</td>
         </template>
         <template v-slot:item.systolic="{ item }">
-          <v-chip :color="getSystolicColor(item.systolic)" dark small>{{
-            item.systolic
-          }}</v-chip>
+          <v-chip
+            :color="getSystolicColor(item.systolic)"
+            :outlined="getSystolicColor(item.systolic) == 'grey darken-1'"
+            dark
+            small
+            >{{ item.systolic }}</v-chip
+          >
         </template>
         <template v-slot:item.diastolic="{ item }">
-          <v-chip :color="getDiastolicColor(item.diastolic)" dark small>{{
-            item.diastolic
-          }}</v-chip>
+          <v-chip
+            :color="getDiastolicColor(item.diastolic)"
+            :outlined="getDiastolicColor(item.diastolic) == 'grey darken-1'"
+            dark
+            small
+            >{{ item.diastolic }}</v-chip
+          >
         </template>
       </v-data-table>
     </v-container>
