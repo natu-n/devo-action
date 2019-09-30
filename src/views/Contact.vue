@@ -1,77 +1,79 @@
 <template>
-  <v-card class="mx-auto" max-width="800" outlined>
-    <v-row class="fill-height" v-if="$store.state.loading">
-      <v-col>
-        <v-row class="pa-0 ma-0">
-          <v-col class="pa-0 ma-0">
-            <v-sheet height="64">
-              <v-toolbar flat color="white">
-                <v-btn outlined class="mr-4" @click="setToday">Today</v-btn>
-                <v-btn fab text small @click="prev">
-                  <v-icon small>mdi-chevron-left</v-icon>
-                </v-btn>
-                <v-btn fab text small @click="next">
-                  <v-icon small>mdi-chevron-right</v-icon>
-                </v-btn>
-                <v-toolbar-title>{{ title }}</v-toolbar-title>
-                <v-spacer></v-spacer>
-              </v-toolbar>
-            </v-sheet>
-          </v-col>
-          <v-col class="pa-0 ma-0"></v-col>
-        </v-row>
-        <v-sheet height="500" width="800">
-          <v-calendar
-            ref="calendar"
-            v-model="focus"
-            :now="today"
-            type="month"
-            color="primary"
-            class="fill-hight"
-          >
-            <template v-slot:day="{ present, past, date }">
-              <v-row class="mx-0 px-0">
-                <v-sheet height="2" tile></v-sheet>
-              </v-row>
+  <v-app>
+    <v-card class="mx-auto" max-width="800" outlined>
+      <v-row class="fill-height" v-if="$store.state.loading">
+        <v-col>
+          <v-row class="pa-0 ma-0">
+            <v-col class="pa-0 ma-0">
+              <v-sheet height="64">
+                <v-toolbar flat color="white">
+                  <v-btn outlined class="mr-4" @click="setToday">Today</v-btn>
+                  <v-btn fab text small @click="prev">
+                    <v-icon small>mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <v-btn fab text small @click="next">
+                    <v-icon small>mdi-chevron-right</v-icon>
+                  </v-btn>
+                  <v-toolbar-title>{{ title }}</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+              </v-sheet>
+            </v-col>
+            <v-col class="pa-0 ma-0"></v-col>
+          </v-row>
+          <v-sheet height="500" width="800">
+            <v-calendar
+              ref="calendar"
+              v-model="focus"
+              :now="today"
+              type="month"
+              color="primary"
+              class="fill-hight"
+            >
+              <template v-slot:day="{ present, past, date }">
+                <v-row class="mx-0 px-0">
+                  <v-sheet height="2" tile></v-sheet>
+                </v-row>
 
-              <v-row class="mx-0 px-0">
-                <v-sheet
-                  v-for="(percent, i) in tracked1[date]"
-                  :key="i"
-                  :color="colors[i]"
-                  :width="`${percent}%`"
-                  height="23"
-                  tile
-                >
-                  <p v-if="i == 0">
-                    {{ Systolic[date] }}
-                  </p>
-                </v-sheet>
-              </v-row>
-              <v-row class="mx-0 px-0">
-                <v-sheet height="2" tile></v-sheet>
-              </v-row>
-              <v-row class="mx-0 px-0">
-                <v-sheet
-                  v-for="(percent, i) in tracked2[date]"
-                  :key="i"
-                  :title="category[i]"
-                  :color="colors[i]"
-                  :width="`${percent}%`"
-                  height="23"
-                  tile
-                >
-                  <p v-if="i == 0">
-                    {{ Diastolic[date] }}
-                  </p>
-                </v-sheet>
-              </v-row>
-            </template>
-          </v-calendar>
-        </v-sheet>
-      </v-col>
-    </v-row>
-  </v-card>
+                <v-row class="mx-0 px-0">
+                  <v-sheet
+                    v-for="(percent, i) in tracked1[date]"
+                    :key="i"
+                    :color="colors[i]"
+                    :width="`${percent}%`"
+                    height="23"
+                    tile
+                  >
+                    <p v-if="i == 0">
+                      {{ Systolic[date] }}
+                    </p>
+                  </v-sheet>
+                </v-row>
+                <v-row class="mx-0 px-0">
+                  <v-sheet height="2" tile></v-sheet>
+                </v-row>
+                <v-row class="mx-0 px-0">
+                  <v-sheet
+                    v-for="(percent, i) in tracked2[date]"
+                    :key="i"
+                    :title="category[i]"
+                    :color="colors[i]"
+                    :width="`${percent}%`"
+                    height="23"
+                    tile
+                  >
+                    <p v-if="i == 0">
+                      {{ Diastolic[date] }}
+                    </p>
+                  </v-sheet>
+                </v-row>
+              </template>
+            </v-calendar>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-app>
 </template>
 
 <script>

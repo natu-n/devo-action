@@ -1,30 +1,34 @@
 <template>
-  <v-card class="mx-auto" max-width="600" elevation="0">
-    <v-row justify="space-around" v-if="$store.state.loading">
-      <div>
-        <div class="title">Until last month</div>
-        <v-date-picker
-          v-model="pastDate"
-          min="2017-10-20"
-          :max="lastPastDate"
-          :events="functionEvents"
-          event-color="green lighten-1"
-          color="blue lighten-3"
-          header-color="green lighten-1"
-        ></v-date-picker>
-      </div>
-      <div>
-        <div class="title">this month</div>
-        <v-date-picker
-          v-model="today"
-          :disabled="true"
-          :events="functionEvents"
-          color="blue lighten-5"
-          header-color="primary"
-        ></v-date-picker>
-      </div>
-    </v-row>
-  </v-card>
+  <v-app>
+    <v-container>
+      <v-card class="mx-auto" max-width="600" elevation="0">
+        <v-row justify="space-around" v-if="$store.state.loading">
+          <div>
+            <div class="title">Until last month</div>
+            <v-date-picker
+              v-model="pastDate"
+              min="2017-10-20"
+              :max="lastPastDate"
+              :events="functionEvents"
+              event-color="green lighten-1"
+              color="blue lighten-3"
+              header-color="green lighten-1"
+            ></v-date-picker>
+          </div>
+          <div>
+            <div class="title">this month</div>
+            <v-date-picker
+              v-model="today"
+              :disabled="true"
+              :events="functionEvents"
+              color="blue lighten-5"
+              header-color="primary"
+            ></v-date-picker>
+          </div>
+        </v-row>
+      </v-card>
+    </v-container>
+  </v-app>
 </template>
 
 <script>

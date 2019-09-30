@@ -1,43 +1,46 @@
 <template>
-  <v-card class="mx-auto mt-4" color="grey lighten-4" max-width="600">
-    <template v-if="$store.state.loading">
-      <p v-if="this.toDate == null" v-show="true">
-        {{ (this.toDate = this.$store.state.toDate) }}
-      </p>
-      <v-row>
-        <v-col></v-col>
-        <v-col>
-          <v-dialog
-            ref="dialog"
-            v-model="modal"
-            :return-value.sync="toDate"
-            persistent
-            width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="toDate"
-                :prefix="fromDate + ' - '"
-                prepend-icon="event"
-                x-larg="true"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="toDate"
-              :max="$store.state.today"
-              scrollable
+  <v-app>
+    <v-card class="mx-auto mt-4" color="grey lighten-4" max-width="600">
+      <template v-if="$store.state.loading">
+        <p v-if="this.toDate == null" v-show="true">
+          {{ (this.toDate = this.$store.state.toDate) }}
+        </p>
+        <v-row>
+          <v-col></v-col>
+          <v-col>
+            <v-dialog
+              ref="dialog"
+              v-model="modal"
+              :return-value.sync="toDate"
+              persistent
+              width="290px"
             >
-              <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="setDate(toDate)">OK</v-btn>
-            </v-date-picker>
-          </v-dialog>
-        </v-col>
-      </v-row>
-
-      <line-chart :chart-data="fillData()" :width="480" :height="200" />
-    </template>
-  </v-card>
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="toDate"
+                  :prefix="fromDate + ' - '"
+                  prepend-icon="event"
+                  x-larg="true"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="toDate"
+                :max="$store.state.today"
+                scrollable
+              >
+                <v-btn text color="primary" @click="modal = false"
+                  >Cancel</v-btn
+                >
+                <v-btn text color="primary" @click="setDate(toDate)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+          </v-col>
+        </v-row>
+        <line-chart :chart-data="fillData()" :width="480" :height="200" />
+      </template>
+    </v-card>
+  </v-app>
 </template>
 
 <script>
