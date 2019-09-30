@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container>
+    <v-card class="mx-auto mt-4" max-width="600">
       <template v-if="$store.state.loading">
         <p v-if="this.toDate == null" v-show="true">
           {{ (this.toDate = this.$store.state.toDate) }}
@@ -72,7 +72,7 @@
           >
         </template>
       </v-data-table>
-    </v-container>
+    </v-card>
   </v-app>
 </template>
 
@@ -84,13 +84,26 @@ export default {
   mixins: [Utilities],
   data: () => ({
     headers: [
-      { text: 'date', align: 'center', value: 'date', sortable: false },
-      { text: 'systolic', align: 'center', value: 'systolic', sortable: false },
+      {
+        text: 'date',
+        align: 'center',
+        value: 'date',
+        sortable: false,
+        width: '33%'
+      },
+      {
+        text: 'systolic',
+        align: 'center',
+        value: 'systolic',
+        sortable: false,
+        width: '33%'
+      },
       {
         text: 'diastolic',
         align: 'center',
         value: 'diastolic',
-        sortable: false
+        sortable: false,
+        width: '33%'
       }
     ],
     page: 1,

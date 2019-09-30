@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <v-card class="mx-auto" max-width="600" elevation="0">
+      <v-card class="mx-auto mt-4" max-width="600" elevation="0">
         <v-row justify="space-around" v-if="$store.state.loading">
           <div>
             <div class="title">Until last month</div>
