@@ -48,6 +48,30 @@ export default {
               suggestedMin: 70,
               suggestedMax: 150
             }
+          },
+          {
+            id: 'third-y-axis',
+            display: false,
+            gridLines: {
+              drawBorder: false
+            },
+            ticks: {
+              autoSbeginatZero: false,
+              suggestedMin: 70,
+              suggestedMax: 150
+            }
+          },
+          {
+            id: 'fourth-y-axis',
+            display: false,
+            gridLines: {
+              drawBorder: false
+            },
+            ticks: {
+              autoSbeginatZero: false,
+              suggestedMin: 70,
+              suggestedMax: 150
+            }
           }
         ]
       }

@@ -41,6 +41,8 @@
       </template>
       <template v-if="$store.state.loading">
         <v-slider
+          v-model="past"
+          min="0"
           max="3"
           :tick-labels="getLabel(slider)"
           ticks="always"
@@ -76,25 +78,44 @@ export default {
       { label: '3 months ago', value: 3, period: 'month' },
       { label: '6 months ago', value: 6, period: 'month' },
       { label: 'A year ago', value: 1, period: 'year' }
-    ]
+    ],
+    past: 0,
+    fromPastDate: dayjs(new Date())
+      .subtract(1, 'month')
+      .format('YYYY-MM-DD'),
+    toPastDate: null
   }),
 
   computed: {},
-
-  // created: function() {
-  //   this.$store.dispatch('getJSON')
-  // },
 
   watch: {
     toDate: function(value) {
       this.fromDate = dayjs(value)
         .subtract(13, 'day')
         .format('YYYY-MM-DD')
-      console.log('loading')
+      this.setPastDate(this.past)
+    },
+
+    past: function(value) {
+      this.toPastDate = dayjs(this.toDate)
+        .subtract(this.slider[value].value, this.slider[value].period)
+        .format('YYYY-MM-DD')
+      this.fromPastDate = dayjs(this.toPastDate)
+        .subtract(13, 'day')
+        .format('YYYY-MM-DD')
     }
   },
 
   methods: {
+    setPastDate: function(value) {
+      this.toPastDate = dayjs(this.toDate)
+        .subtract(this.slider[value].value, this.slider[value].period)
+        .format('YYYY-MM-DD')
+      this.fromPastDate = dayjs(this.toPastDate)
+        .subtract(13, 'day')
+        .format('YYYY-MM-DD')
+    },
+
     setDate(value) {
       this.$refs.dialog.save(value)
       this.$store.commit('setToDate', value)
@@ -117,17 +138,6 @@ export default {
         .filter(x => x)
     },
 
-    customFilter(value) {
-      var _this = this
-      return value
-        .map(function(element, index, array) {
-          if (_this.fromDate <= element.date && element.date <= _this.toDate) {
-            return element
-          }
-        })
-        .filter(x => x)
-    },
-
     setSystolic(value) {
       var _this = this
       return value
@@ -139,11 +149,39 @@ export default {
         .filter(x => x)
     },
 
+    setOldSystolic(value) {
+      var _this = this
+      return value
+        .map(function(element, index, array) {
+          if (
+            _this.fromPastDate <= element.date &&
+            element.date <= _this.toPastDate
+          ) {
+            return element.systolic
+          }
+        })
+        .filter(x => x)
+    },
+
     setDiastolic(value) {
       var _this = this
       return value
         .map(function(element, index, array) {
           if (_this.fromDate <= element.date && element.date <= _this.toDate) {
+            return element.diastolic
+          }
+        })
+        .filter(x => x)
+    },
+
+    setOldDiastolic(value) {
+      var _this = this
+      return value
+        .map(function(element, index, array) {
+          if (
+            _this.fromPastDate <= element.date &&
+            element.date <= _this.toPastDate
+          ) {
             return element.diastolic
           }
         })
@@ -176,6 +214,22 @@ export default {
             borderColor: 'indigo',
             lineTension: 0,
             data: this.setDiastolic(this.$store.state.info),
+            fill: false
+          },
+          {
+            yAxisID: 'third-y-axis',
+            label: 'past-systolic',
+            borderColor: 'red lighten-4',
+            lineTension: 0,
+            data: this.setOldSystolic(this.$store.state.info),
+            fill: false
+          },
+          {
+            yAxisID: 'fourth-y-axis',
+            label: 'past-diastolic',
+            borderColor: 'indigo lighten-4',
+            lineTension: 0,
+            data: this.setOldDiastolic(this.$store.state.info),
             fill: false
           }
         ]
