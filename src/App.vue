@@ -18,7 +18,7 @@
       </v-tabs>
 
       <v-tabs-items v-model="tab">
-        <v-tab-item v-for="item in items" :key="item"> </v-tab-item>
+        <v-tab-item v-for="item in items" :key="item.title"> </v-tab-item>
       </v-tabs-items>
       <v-toolbar-title class="headline text-uppercase">
         <span>Vuetify</span>

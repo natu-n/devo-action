@@ -14,7 +14,6 @@
                   <v-btn fab text small @click="next">
                     <v-icon small>mdi-chevron-right</v-icon>
                   </v-btn>
-                  <v-toolbar-title>{{ title }}</v-toolbar-title>
                   <v-spacer></v-spacer>
                 </v-toolbar>
               </v-sheet>
@@ -32,17 +31,19 @@
             >
               <template v-slot:day="{ present, past, date }">
                 <v-row class="mx-0 px-0">
-                  <v-sheet height="2" tile></v-sheet>
+                  <v-sheet height="1" tile></v-sheet>
                 </v-row>
 
                 <v-row class="mx-0 px-0">
                   <v-sheet
                     v-for="(percent, i) in tracked1[date]"
                     :key="i"
-                    :color="colors[i]"
+                    :color="COLORS[i]"
                     :width="`${percent}%`"
-                    height="23"
+                    height="17"
                     tile
+                    dark
+                    class="caption"
                   >
                     <p v-if="i == 0">
                       {{ Systolic[date] }}
@@ -50,17 +51,19 @@
                   </v-sheet>
                 </v-row>
                 <v-row class="mx-0 px-0">
-                  <v-sheet height="2" tile></v-sheet>
+                  <v-sheet height="1" tile></v-sheet>
                 </v-row>
                 <v-row class="mx-0 px-0">
                   <v-sheet
                     v-for="(percent, i) in tracked2[date]"
                     :key="i"
-                    :title="category[i]"
-                    :color="colors[i]"
+                    :title="CATEGORY[i]"
+                    :color="COLORS[i]"
                     :width="`${percent}%`"
-                    height="23"
+                    height="17"
                     tile
+                    dark
+                    class="caption"
                   >
                     <p v-if="i == 0">
                       {{ Diastolic[date] }}
@@ -82,8 +85,6 @@ export default {
     today: null,
     focus: null,
     type: 'month',
-    start: null,
-    end: null,
     selectedEvent: {},
     selectedElement: null,
     Systolic: {
@@ -113,43 +114,19 @@ export default {
       '2019-01-03': 65,
       '2019-01-02': 80,
       '2019-01-01': 78
-    },
-    colors: ['teal', 'blue', 'red', 'white'],
-    category: ['Development', 'Meetings', '', '']
+    }
   }),
   computed: {
-    title() {
-      const { start, end } = this
-      if (!start || !end) {
-        return ''
-      }
-
-      const startMonth = this.monthFormatter(start)
-      const endMonth = this.monthFormatter(end)
-      const suffixMonth = startMonth === endMonth ? '' : endMonth
-
-      const startYear = start.year
-      const endYear = end.year
-      const suffixYear = startYear === endYear ? '' : endYear
-
-      return `${startMonth} ${startYear}`
-    },
-    monthFormatter() {
-      return this.$refs.calendar.getFormatter({
-        timeZone: 'UTC',
-        month: 'long'
-      })
-    }
+    COLORS: () => ['teal', 'blue', 'red', 'white'],
+    CATEGORY: () => ['Development', 'Meetings', '', '']
   },
+
   mounted() {
     this.today = this.$store.state.toDate
     this.focus = this.$store.state.toDate
-    this.$refs.calendar.checkChange()
   },
+
   methods: {
-    getEventColor(event) {
-      return event.color
-    },
     setToday() {
       this.focus = this.$store.state.today
     },
@@ -158,14 +135,16 @@ export default {
     },
     next() {
       this.$refs.calendar.next()
-    },
-    updateRange({ start, end }) {
-      // You could load events from an outside source (like database) now that we have the start and end dates on the calendar
-      this.start = start
-      this.end = end
     }
   }
 }
+// //*[@id="app"]/div/div/div/div/div[2]/div/div[2]
+// //*[@id="app"]/div/div/div/div/div[2]/div/div[6]
+// document.querySelector("#app > div > div > div > div > div.v-sheet.theme--light > div > div:nth-child(2)")
+// document.querySelector("#app > div > div > div > div > div.v-sheet.theme--light > div > div:nth-child(6)")
+// #app > div > div > div > div > div.v-sheet.theme--light > div > div:nth-child(2)
+// #app > div > div > div > div > div.v-sheet.theme--light > div > div:nth-child(6)
+//div[@class="v-calendar-weekly__week"]
 </script>
 
 <style scoped>
@@ -182,5 +161,8 @@ export default {
   padding: 3px;
   cursor: pointer;
   margin-bottom: 1px;
+}
+.caption p {
+  text-align: right;
 }
 </style>
