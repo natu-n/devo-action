@@ -1,12 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app dense>
-      <v-tabs
-        v-model="tab"
-        align-with-title
-        slider-size="6"
-        background-color="transparent"
-      >
+      <v-tabs align-with-title slider-size="6" background-color="transparent">
         <v-tabs-slider color="blue"></v-tabs-slider>
 
         <v-tab v-for="item in items" :key="item.title" :to="item.link">
@@ -17,7 +12,7 @@
         </v-tab>
       </v-tabs>
 
-      <v-tabs-items v-model="tab">
+      <v-tabs-items>
         <v-tab-item v-for="item in items" :key="item.title"> </v-tab-item>
       </v-tabs-items>
       <v-toolbar-title class="headline text-uppercase">

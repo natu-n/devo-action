@@ -28,10 +28,11 @@
               type="month"
               color="primary"
               class="fill-hight"
+              @change="updateRange"
             >
               <template v-slot:day="{ present, past, date }">
                 <v-row class="mx-0 px-0">
-                  <v-sheet height="1" tile></v-sheet>
+                  <v-sheet :height="spaceHeight" tile></v-sheet>
                 </v-row>
 
                 <v-row class="mx-0 px-0">
@@ -40,7 +41,7 @@
                     :key="i"
                     :color="COLORS[i]"
                     :width="`${percent}%`"
-                    height="17"
+                    :height="barHeight"
                     tile
                     dark
                     class="caption"
@@ -51,7 +52,7 @@
                   </v-sheet>
                 </v-row>
                 <v-row class="mx-0 px-0">
-                  <v-sheet height="1" tile></v-sheet>
+                  <v-sheet :height="spaceHeight" tile></v-sheet>
                 </v-row>
                 <v-row class="mx-0 px-0">
                   <v-sheet
@@ -60,7 +61,7 @@
                     :title="CATEGORY[i]"
                     :color="COLORS[i]"
                     :width="`${percent}%`"
-                    height="17"
+                    :height="barHeight"
                     tile
                     dark
                     class="caption"
@@ -80,11 +81,16 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+
 export default {
   data: () => ({
     today: null,
     focus: null,
-    type: 'month',
+    start: null,
+    spaceHeight: '2',
+    barHeight: '23',
+    end: null,
     selectedEvent: {},
     selectedElement: null,
     Systolic: {
@@ -124,6 +130,7 @@ export default {
   mounted() {
     this.today = this.$store.state.toDate
     this.focus = this.$store.state.toDate
+    this.getBarHeight(this.today)
   },
 
   methods: {
@@ -135,11 +142,30 @@ export default {
     },
     next() {
       this.$refs.calendar.next()
+    },
+    updateRange({ start, end }) {
+      this.start = start
+      this.end = end
+      this.getBarHeight(this.start.date)
+    },
+    getBarHeight(date) {
+      let normalizedDate = dayjs(date)
+      let weekdayNo = parseInt(normalizedDate.format('d'))
+      let monthLastday = parseInt(normalizedDate.endOf('month').format('DD'))
+      let weekCount = Math.ceil((weekdayNo + monthLastday) / 7)
+
+      if (weekCount === 5) {
+        this.spaceHeight = '2'
+        this.barHeight = '23'
+      } else {
+        this.spaceHeight = '1'
+        this.barHeight = '17'
+      }
     }
   }
 }
-// //*[@id="app"]/div/div/div/div/div[2]/div/div[2]
-// //*[@id="app"]/div/div/div/div/div[2]/div/div[6]
+//*[@id="app"]/div/div/div/div/div[2]/div/div[2]
+//*[@id="app"]/div/div/div/div/div[2]/div/div[6]
 // document.querySelector("#app > div > div > div > div > div.v-sheet.theme--light > div > div:nth-child(2)")
 // document.querySelector("#app > div > div > div > div > div.v-sheet.theme--light > div > div:nth-child(6)")
 // #app > div > div > div > div > div.v-sheet.theme--light > div > div:nth-child(2)

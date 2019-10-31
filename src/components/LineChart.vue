@@ -29,11 +29,11 @@ export default {
             id: 'first-y-axis',
             display: true,
             gridLines: {
-              drawBorder: false
+              drawBorder: true
             },
             ticks: {
               autoSbeginatZero: false,
-              suggestedMin: 70,
+              suggestedMin: 60,
               suggestedMax: 150
             }
           },
@@ -41,11 +41,11 @@ export default {
             id: 'second-y-axis',
             display: false,
             gridLines: {
-              drawBorder: false
+              drawBorder: true
             },
             ticks: {
               autoSbeginatZero: false,
-              suggestedMin: 70,
+              suggestedMin: 60,
               suggestedMax: 150
             }
           },
