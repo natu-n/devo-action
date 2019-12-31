@@ -119,7 +119,7 @@ export default {
     },
 
     setLb: function(value) {
-      return this.LBL.map(function(element, index, array) {
+      return this.LBL.map(function(element) {
         return dayjs(value)
           .subtract(element, 'day')
           .format('M/D')
@@ -128,7 +128,7 @@ export default {
 
     getLabel(value) {
       return value
-        .map(function(element, index, array) {
+        .map(function(element) {
           return element.label
         })
         .filter(x => x)
@@ -136,7 +136,7 @@ export default {
 
     setItem(key, from, to) {
       return this.$store.state.info
-        .map(function(element, index, array) {
+        .map(function(element) {
           if (from <= element.date && element.date <= to) {
             return element[key]
           }
