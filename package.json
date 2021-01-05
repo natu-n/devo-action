@@ -16,7 +16,7 @@
     "@mdi/font": "^5.0.45",
     "@soda/friendly-errors-webpack-plugin": "^1.7.1",
     "@types/chart.js": "^2.9.16",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "boxen": "^4.2.0",
     "chart.js": "^2.9.3",
     "chartkick": "^3.1.1",
