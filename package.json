@@ -18,7 +18,7 @@
     "@types/chart.js": "^2.9.16",
     "axios": "^0.19.2",
     "boxen": "^4.2.0",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "chartkick": "^3.1.1",
     "core-js": "^3.6.4",
     "dayjs": "^1.8.23",
